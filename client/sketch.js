@@ -1,7 +1,4 @@
-let currentRoomCode = 0;
-
 const socket = io.connect("ws://localhost:8001");
-
 // window.onload = () => {
 //     const join_option_input = prompt('Select: "CREATE" or "JOIN"', "CREATE");
 //     if (join_option_input === "CREATE") {
@@ -27,9 +24,10 @@ socket.on("upd", ledger => {
     }
 });
 
-document.getElementById("send").addEventListener("click", huh);
-
+// document.getElementById("buttonn").addEventListener("click", huh);
+console.log(document.getElementById("demo").value);
 function huh() {
+    console.log('help');
     let fMessage = document.getElementById("name") + " ";
     fMessage += document.getElementById("msg").value;
     socket.emit("sent", fMessage);
