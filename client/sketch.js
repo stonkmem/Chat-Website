@@ -1,4 +1,6 @@
 const socket = io.connect("ws://localhost:8001");
+let ledger = [];
+/*
 // window.onload = () => {
 //     const join_option_input = prompt('Select: "CREATE" or "JOIN"', "CREATE");
 //     if (join_option_input === "CREATE") {
@@ -13,23 +15,31 @@ const socket = io.connect("ws://localhost:8001");
 
 // socket.on("setRoomCode", (code) => {
 //     currentRoomCode = code;
-// });
+// });*/
 
-socket.on("upd", ledger => {
-    for (let data=0; data<ledger.length; data++) {
-        let liNode = document.createElement("ELEM");
-        let txtNode = document.createTextNode(ledger[data]);
-        liNode.appendChild(txtNode);
-        document.getElementById("chat-display").appendChild(liNode);
-    }
+socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
 });
 
-// document.getElementById("buttonn").addEventListener("click", huh);
-console.log(document.getElementById("demo").value);
-function huh() {
-    console.log('help');
-    let fMessage = document.getElementById("name") + " ";
+socket.on("upd", mssg => {
+    ledger.push(mssg);
+    document.getElementById("chat-display").innerHTML = '';
+    let ul = document.createElement("ul");
+    for (let data=0; data<ledger.length; data++) {
+        let li = document.createElement("li");
+        li.textContent = ledger[data];
+        ul.appendChild(li);
+    }
+    document.getElementById("chat-display").appendChild(ul);
+});
+
+document.getElementById("buttonn").addEventListener("click", ()=>{
+    let fMessage = document.getElementById("name").value + ": ";
     fMessage += document.getElementById("msg").value;
-    socket.emit("sent", fMessage);
+    if(document.getElementById("msg").value!=""){
+        socket.emit("msged", fMessage);
+        console.log("KillMe");
+    }
     document.getElementById("msg").value = "";
-}
+});
+// setInterval(()=>{socket.emit("msged", document.getElementById("msg").value);console.log("Cooking");}, 1000);
