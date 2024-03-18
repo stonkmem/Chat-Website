@@ -42,4 +42,27 @@ document.getElementById("buttonn").addEventListener("click", ()=>{
     }
     document.getElementById("msg").value = "";
 });
-// setInterval(()=>{socket.emit("msged", document.getElementById("msg").value);console.log("Cooking");}, 1000);
+
+document.getElementById("klar").addEventListener("click", () => {
+    ledger=[];
+    document.getElementById("chat-display").innerHTML = '';
+    let ul = document.createElement("ul");
+    for (let data=0; data<ledger.length; data++) {
+        let li = document.createElement("li");
+        li.textContent = ledger[data];
+        ul.appendChild(li);
+    }
+    document.getElementById("chat-display").appendChild(ul);
+});
+
+socket.once("backup-history", (hist)=>{
+    ledger=hist;
+    document.getElementById("chat-display").innerHTML = '';
+    let ul = document.createElement("ul");
+    for (let data=0; data<ledger.length; data++) {
+        let li = document.createElement("li");
+        li.textContent = ledger[data];
+        ul.appendChild(li);
+    }
+    document.getElementById("chat-display").appendChild(ul);
+});

@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+let hist = [];
 // create http server forwarding network traffic to socketio server
 const io = new Server(8001, {
     cors: {
@@ -23,6 +24,7 @@ console.log("Server running...")
 
 io.on("connection", socket => {
 
+    io.emit("backup-history", hist);
     console.log("New connection!");
     let client = new Client(socket);
     clients.add(client);
@@ -36,6 +38,7 @@ io.on("connection", socket => {
 
     socket.on("msged", (strrr) => {
         console.log("RECEIVED");
+        hist.push(strrr);
         io.emit("upd", strrr);
     });
 
